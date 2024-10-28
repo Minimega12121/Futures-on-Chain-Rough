@@ -1,0 +1,72 @@
+/* Global styles for dark mode */
+.dark-mode {
+  background-color: #121212; /* Dark background */
+  color: #e0e0e0; /* Light text color */
+}
+
+/* Ensure nav text is also light in dark mode */
+.dark-mode nav {
+  background-color: #1e1e1e; /* Darker nav background */
+  color: #e0e0e0; /* Light text color */
+}
+
+/* Ensure buttons have proper contrast in dark mode */
+.dark-mode button {
+  background-color: #333; /* Darker button background */
+  color: #e0e0e0; /* Light text color */
+}
+
+/* Specific styling for card components in dark mode */
+.dark-mode .card {
+  background-color: #1e1e1e; /* Darker card background */
+  color: #e0e0e0; /* Light text color */
+}
+
+/* Ensure form control elements have proper contrast */
+.dark-mode input, .dark-mode select, .dark-mode textarea {
+  background-color: #333; /* Darker input background */
+  color: #e0e0e0; /* Light text color */
+  border: 1px solid #555; /* Darker borders */
+}
+
+.dark-mode .form-control::placeholder {
+  color: #aaa; /* Lighter placeholder text in dark mode */
+}
+/* Ensure dark mode applies globally to the entire page */
+.dark-mode {
+  background-color: #121212; /* Dark background for the whole page */
+  color: #e0e0e0; /* Light text color */
+}
+
+/* Apply dark background and light text to body and html */
+.dark-mode body, .dark-mode html {
+  background-color: #121212; /* Dark background */
+  color: #e0e0e0; /* Light text color */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Fix for ensuring full-page coverage in dark mode */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.dark-mode .container {
+  background-color: #1e1e1e; /* Dark background for content container */
+  color: #e0e0e0; /* Light text */
+}
+
+/* Additional styling for nav bar, buttons, etc. */
+.dark-mode nav {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.dark-mode button {
+  background-color: #333;
+  color: #e0e0e0;
+}
+

@@ -1,0 +1,14 @@
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/deps/libclang_sys-5031531b6912ba04.rmeta: /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/macros.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/common.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/dynamic.rs
+
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/deps/libclang_sys-5031531b6912ba04.rlib: /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/macros.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/common.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/dynamic.rs
+
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/deps/clang_sys-5031531b6912ba04.d: /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/macros.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/common.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/dynamic.rs
+
+/home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs:
+/home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs:
+/home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs:
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/macros.rs:
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/common.rs:
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out/dynamic.rs:
+
+# env-dep:OUT_DIR=/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/debug/build/clang-sys-3d02a96388e75dfc/out

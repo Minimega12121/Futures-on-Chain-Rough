@@ -1,0 +1,17 @@
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+/* index.css */
+
+html, body {
+  height: 100%; /* Ensure full coverage */
+  margin: 0; /* Reset margins */
+  padding: 0; /* Reset padding */
+}
+
+/* Initial light mode styles, can be overridden by App.css when dark mode is active */
+body {
+  background-color: white; /* Default background color */
+  color: black; /* Default text color */
+}
