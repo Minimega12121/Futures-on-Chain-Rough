@@ -1,12 +1,11 @@
 use oasis_runtime_sdk::modules::rofl::app::prelude::*;
 use std::sync::Arc;
-use tokio::time::{self, Duration};
 use serde_json::Value;
 use anyhow::Result;
 
 /// Address where the oracle contract is deployed.
 // #region oracle-contract-address
-const ORACLE_CONTRACT_ADDRESS: &str = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // TODO: Replace with your contract address.
+const ORACLE_CONTRACT_ADDRESS: &str = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // TODO: Replace with your contract address.
 
 struct OracleApp;
 
@@ -91,51 +90,103 @@ impl OracleApp {
                         data: tx_data,
                     },
                 );
-                tx.set_fee_gas(200_000);
+                tx.set_fee_gas(1_000_000);
 
                 env.client().sign_and_submit_tx(env.signer(), tx).await?;
 
-             time::sleep(Duration::from_secs(10)).await;
+            //  time::sleep(Duration::from_secs(10)).await;
 
-             // Fetch market price data for Bitcoin.
-        let market_price_response: Value = rofl_utils::https::agent()
-            .get("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD")
+        //      // Fetch market price data for Bitcoin.
+        // let market_price_response: Value = rofl_utils::https::agent()
+        //     .get("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD")
+        //     .call()?
+        //     .body_mut()
+        //     .read_json()?;
+
+        // let market_price = (market_price_response["USD"]
+        //     .as_f64()
+        //     .unwrap_or_default()
+        //     * 1_000_000.0) as u128;
+
+        // // Prepare and submit the market price observation to the Oracle contract.
+        // let mp_tx_data = [
+        //     ethabi::short_signature("submitMarketPriceObservation", &[
+        //         ethabi::ParamType::Uint(128),
+        //     ])
+        //     .to_vec(),
+        //     ethabi::encode(&[ethabi::Token::Uint(market_price.into())]),
+        // ]
+        // .concat();
+
+        // let mut mp_tx = self.new_transaction(
+        //     "evm.Call",
+        //     module_evm::types::Call {
+        //         address: ORACLE_CONTRACT_ADDRESS.parse().unwrap(),
+        //         value: 0.into(),
+        //         data: mp_tx_data,
+        //     },
+        // );
+        // mp_tx.set_fee_gas(200_000);
+        // env.client().sign_and_submit_tx(env.signer(), mp_tx).await?;
+
+
+            let response: Value = rofl_utils::https::agent()
+            .get("https://min-api.cryptocompare.com/data/v2/histoday?fsym=ETH&tsym=USD&limit=1&api_key=YOUR_API_KEY")
             .call()?
             .body_mut()
             .read_json()?;
 
-        let market_price = (market_price_response["USD"]
-            .as_f64()
-            .unwrap_or_default()
-            * 1_000_000.0) as u128;
+            let data = response["Data"]["Data"][0]
+                .as_object()
+                .ok_or_else(|| anyhow::anyhow!("OHLCV data missing"))?;
 
-        // Prepare and submit the market price observation to the Oracle contract.
-        let mp_tx_data = [
-            ethabi::short_signature("submitMarketPriceObservation", &[
-                ethabi::ParamType::Uint(128),
-            ])
-            .to_vec(),
-            ethabi::encode(&[ethabi::Token::Uint(market_price.into())]),
-        ]
-        .concat();
+            let high = (data["high"].as_f64().unwrap() * 1_000_000.0) as u128;
+            let low = (data["low"].as_f64().unwrap() * 1_000_000.0) as u128;
+            let volume = (data["volumeto"].as_f64().unwrap() * 1_000_000.0) as u128;
 
-        let mut mp_tx = self.new_transaction(
-            "evm.Call",
-            module_evm::types::Call {
-                address: ORACLE_CONTRACT_ADDRESS.parse().unwrap(),
-                value: 0.into(),
-                data: mp_tx_data,
-            },
-        );
-        mp_tx.set_fee_gas(200_000);
-        env.client().sign_and_submit_tx(env.signer(), mp_tx).await?;
+            // Fetch Index Price (current market price)
+            let price_response: Value = rofl_utils::https::agent()
+                .get("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD")
+                .call()?
+                .body_mut()
+                .read_json()?;
+
+            let market_price = (price_response["USD"].as_f64().unwrap() * 1_000_000.0) as u128;
+
+            // Prepare and submit the transaction to the Oracle contract
+            let tx_data = [
+                ethabi::short_signature("submitMarketObservations", &[
+                    ethabi::ParamType::Uint(128),
+                    ethabi::ParamType::Uint(128),
+                    ethabi::ParamType::Uint(128),
+                    ethabi::ParamType::Uint(128)
+                ])
+                .to_vec(),
+                ethabi::encode(&[
+                    ethabi::Token::Uint(market_price.into()),
+                    ethabi::Token::Uint(volume.into()),
+                    ethabi::Token::Uint(high.into()),
+                    ethabi::Token::Uint(low.into())
+                ]),
+            ]
+            .concat();
+
+            let mut tx = self.new_transaction(
+                "evm.Call",
+                module_evm::types::Call {
+                    address: ORACLE_CONTRACT_ADDRESS.parse().unwrap(),
+                    value: 0.into(),
+                    data: tx_data,
+                },
+            );
+
+            tx.set_fee_gas(1_000_000);
+            env.client().sign_and_submit_tx(env.signer(), tx).await?;
 
         Ok(())
     }
 
 }
-
-
 
 fn main() {
     OracleApp.start();
@@ -145,4 +196,3 @@ fn main() {
 //   npx hardhat compile
 //    export PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 //  npx hardhat deploy rofl1qqn9xndja7e2pnxhttktmecvwzz0yqwxsquqyxdf --network sapphire-localnet
-//

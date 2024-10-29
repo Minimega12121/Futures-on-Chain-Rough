@@ -1,42 +1,74 @@
-import React, { useState } from "react";
-import TokenSwapper from "./components/TokenSwapper";
-import AddLiquidity from "./components/AddLiquidity";
-import ShowHistory from "./components/ShowHistory";
-import CrossChainTokenSwapper from "./components/CrossChainTokenSwapper"; // Import the new Cross Chain Token Swapper component
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';  // Include custom CSS for dark mode
+import React, { useEffect, useState } from "react";
+import futures from "./components/contracts/futures";
+import "./App.css";
+import web3 from "./components/contracts/web3";
 
 const App = () => {
-  const [activePage, setActivePage] = useState("swap");
+  const [marketPrice, setMarketPrice] = useState("0.00");
+  const [ohlcvHistory, setOhlcvHistory] = useState([]);
+
+  // Function to fetch the current market price
+  const fetchMarketPrice = async () => {
+    try {
+      const response = await futures.methods.currentMarketPrice().call();
+      const mp = Number(response) / 1_000_000; // Convert to fractional
+      setMarketPrice(mp.toFixed(2)); // Keep 2 decimal places
+    } catch (error) {
+      console.error("Error fetching market price:", error);
+    }
+  };
+
+  // Function to fetch the OHLCV history
+  const fetchOHLCVHistory = async () => {
+    try {
+      const ohlcvData = await futures.methods.getOHLCVHistory().call();
+      setOhlcvHistory(ohlcvData);
+    } catch (error) {
+      console.error("Error fetching OHLCV history:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch data repeatedly every 1 second
+    const interval = setInterval(() => {
+      fetchMarketPrice();
+      fetchOHLCVHistory();
+    }, 200); // Call every 1 second
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array ensures it runs once on mount
 
   return (
-    <div className="container mt-5">
-      {/* Title of the dEX app */}
-      <h1 className="text-center mb-4">Omniswap</h1>
+    <div className="App">
+      <h1>Futures Market Dashboard</h1>
+      <p>Current Market Price: {marketPrice}</p>
 
-      {/* Navigation Menu */}
-      <nav className="nav justify-content-center mb-4">
-        <button className="btn btn-primary mx-2" onClick={() => setActivePage("swap")}>
-          Token Swapper
-        </button>
-        <button className="btn btn-primary mx-2" onClick={() => setActivePage("liquidity")}>
-          Add Liquidity
-        </button>
-        <button className="btn btn-primary mx-2" onClick={() => setActivePage("history")}>
-          Show History
-        </button>
-        <button className="btn btn-primary mx-2" onClick={() => setActivePage("crossChainSwap")}>
-          Cross Chain Token Swapper
-        </button>
-      </nav>
-
-      {/* Active Page Content */}
-      <div className="card p-4">
-        {activePage === "swap" && <TokenSwapper />}
-        {activePage === "liquidity" && <AddLiquidity />}
-        {activePage === "history" && <ShowHistory />}
-        {activePage === "crossChainSwap" && <CrossChainTokenSwapper />} {/* Show Cross Chain Token Swapper Page */}
-      </div>
+      <h2>OHLCV History</h2>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Block Number</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ohlcvHistory.map((entry, index) => (
+            <tr key={index}>
+              <td>{Number(entry.blockNumber)}</td>
+              <td>{Number(entry.open) / 1_000_000}</td>
+              <td>{Number(entry.high) / 1_000_000}</td>
+              <td>{Number(entry.low) / 1_000_000}</td>
+              <td>{Number(entry.close) / 1_000_000}</td>
+              <td>{Number(entry.volume)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
