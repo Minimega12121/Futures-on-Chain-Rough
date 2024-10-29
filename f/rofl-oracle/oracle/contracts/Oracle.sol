@@ -111,7 +111,7 @@ contract Oracle {
         dailyLow = _dailyLow;
     }
 
-    function getOHLCVHistory() external view returns (OHLCV[20] memory) {
+    function getOHLCVHistory() external view returns (OHLCV[15] memory) {
         return ohlcvHistory;
     }
 
