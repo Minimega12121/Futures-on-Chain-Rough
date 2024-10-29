@@ -1,0 +1,12 @@
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/deps/libmbedtls_sys-06f5da3a4281189a.rmeta: /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mbedtls-sys-auto-2.28.7/src/lib.rs /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mbedtls-sys-auto-2.28.7/src/types.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-sys-auto-5eb9fdb450c1e574/out/mod-bindings.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-sys-auto-5eb9fdb450c1e574/out/bindings.rs
+
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/deps/libmbedtls_sys-06f5da3a4281189a.rlib: /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mbedtls-sys-auto-2.28.7/src/lib.rs /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mbedtls-sys-auto-2.28.7/src/types.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-sys-auto-5eb9fdb450c1e574/out/mod-bindings.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-sys-auto-5eb9fdb450c1e574/out/bindings.rs
+
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/deps/mbedtls_sys-06f5da3a4281189a.d: /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mbedtls-sys-auto-2.28.7/src/lib.rs /home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mbedtls-sys-auto-2.28.7/src/types.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-sys-auto-5eb9fdb450c1e574/out/mod-bindings.rs /home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-sys-auto-5eb9fdb450c1e574/out/bindings.rs
+
+/home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mbedtls-sys-auto-2.28.7/src/lib.rs:
+/home/archit/.cargo/registry/src/index.crates.io-6f17d22bba15001f/mbedtls-sys-auto-2.28.7/src/types.rs:
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-sys-auto-5eb9fdb450c1e574/out/mod-bindings.rs:
+/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-sys-auto-5eb9fdb450c1e574/out/bindings.rs:
+
+# env-dep:OUT_DIR=/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-sys-auto-5eb9fdb450c1e574/out

@@ -1,5 +1,6 @@
 use oasis_runtime_sdk::modules::rofl::app::prelude::*;
 use std::sync::Arc;
+use tokio::time::{self, Duration};
 use serde_json::Value;
 use anyhow::Result;
 
@@ -49,7 +50,7 @@ impl OracleApp {
     /// Fetch OHLCV data from CryptoCompare and submit it to the Oracle contract.
     async fn run_oracle(self: Arc<Self>, env: Environment<Self>) -> Result<()> {
             let response: Value = rofl_utils::https::agent()
-                .get("https://min-api.cryptocompare.com/data/v2/histominute?fsym=ETH&tsym=USD&limit=10&api_key=YOUR_API_KEY")
+                .get("https://min-api.cryptocompare.com/data/v2/histominute?fsym=ETH&tsym=USD&limit=10&api_key=3df9cc83af512bebeb5f27bcd1f73556459b93e2fa410f748aa25d3e30213ccf")
                 .call()?
                 .body_mut()
                 .read_json()?;
@@ -130,59 +131,59 @@ impl OracleApp {
         // env.client().sign_and_submit_tx(env.signer(), mp_tx).await?;
 
 
-            let response: Value = rofl_utils::https::agent()
-            .get("https://min-api.cryptocompare.com/data/v2/histoday?fsym=ETH&tsym=USD&limit=1&api_key=YOUR_API_KEY")
-            .call()?
-            .body_mut()
-            .read_json()?;
+          // Fetch OHLCV data
+        let response: Value = rofl_utils::https::agent()
+        .get("https://min-api.cryptocompare.com/data/v2/histoday?fsym=ETH&tsym=USD&limit=1&api_key=3df9cc83af512bebeb5f27bcd1f73556459b93e2fa410f748aa25d3e30213ccf")
+        .call()?
+        .body_mut()
+        .read_json()?;
 
-            let data = response["Data"]["Data"][0]
-                .as_object()
-                .ok_or_else(|| anyhow::anyhow!("OHLCV data missing"))?;
+    let data = response["Data"]["Data"][0]
+        .as_object()
+        .ok_or_else(|| anyhow::anyhow!("OHLCV data missing"))?;
 
-            let high = (data["high"].as_f64().unwrap() * 1_000_000.0) as u128;
-            let low = (data["low"].as_f64().unwrap() * 1_000_000.0) as u128;
-            let volume = (data["volumeto"].as_f64().unwrap() * 1_000_000.0) as u128;
+    let high = (data["high"].as_f64().unwrap() * 1_000_000.0) as u128;
+    let low = (data["low"].as_f64().unwrap() * 1_000_000.0) as u128;
+    let volume = (data["volumeto"].as_f64().unwrap() * 1_000_000.0) as u128;
 
-            // Fetch Index Price (current market price)
-            let price_response: Value = rofl_utils::https::agent()
-                .get("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD")
-                .call()?
-                .body_mut()
-                .read_json()?;
+    // Fetch Index Price (current market price)
+    let price_response: Value = rofl_utils::https::agent()
+        .get("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD&api_key=3df9cc83af512bebeb5f27bcd1f73556459b93e2fa410f748aa25d3e30213ccf")
+        .call()?
+        .body_mut()
+        .read_json()?;
 
-            let market_price = (price_response["USD"].as_f64().unwrap() * 1_000_000.0) as u128;
+    let market_price = (price_response["USD"].as_f64().unwrap() * 1_000_000.0) as u128;
 
-            // Prepare and submit the transaction to the Oracle contract
-            let tx_data = [
-                ethabi::short_signature("submitMarketObservations", &[
-                    ethabi::ParamType::Uint(128),
-                    ethabi::ParamType::Uint(128),
-                    ethabi::ParamType::Uint(128),
-                    ethabi::ParamType::Uint(128)
-                ])
-                .to_vec(),
-                ethabi::encode(&[
-                    ethabi::Token::Uint(market_price.into()),
-                    ethabi::Token::Uint(volume.into()),
-                    ethabi::Token::Uint(high.into()),
-                    ethabi::Token::Uint(low.into())
-                ]),
-            ]
-            .concat();
+    // Prepare and submit the transaction to the Oracle contract
+    let tx_data = [
+        ethabi::short_signature("submitMarketObservations", &[
+            ethabi::ParamType::Uint(128),
+            ethabi::ParamType::Uint(128),
+            ethabi::ParamType::Uint(128),
+            ethabi::ParamType::Uint(128)
+        ])
+        .to_vec(),
+        ethabi::encode(&[
+            ethabi::Token::Uint(market_price.into()),
+            ethabi::Token::Uint(volume.into()),
+            ethabi::Token::Uint(high.into()),
+            ethabi::Token::Uint(low.into())
+        ]),
+    ]
+    .concat();
 
-            let mut tx = self.new_transaction(
-                "evm.Call",
-                module_evm::types::Call {
-                    address: ORACLE_CONTRACT_ADDRESS.parse().unwrap(),
-                    value: 0.into(),
-                    data: tx_data,
-                },
-            );
+    let mut tx = self.new_transaction(
+        "evm.Call",
+        module_evm::types::Call {
+            address: ORACLE_CONTRACT_ADDRESS.parse().unwrap(),
+            value: 0.into(),
+            data: tx_data,
+        },
+    );
 
-            tx.set_fee_gas(1_000_000);
-            env.client().sign_and_submit_tx(env.signer(), tx).await?;
-
+    tx.set_fee_gas(3_000_000);
+    env.client().sign_and_submit_tx(env.signer(), tx).await?;
         Ok(())
     }
 
