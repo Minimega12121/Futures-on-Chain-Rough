@@ -107,7 +107,7 @@ task("oracle-query", "Queries the oracle contract")
   console.log("Using account:", signer.address);
    const buy =  taskArgs.buy ? true : false;
     // Call openPosition on the deployed contract
-    const tx = await Oracle.openPosition(leverage, tokenamount);
+    const tx = await Oracle.openPosition(leverage, tokenamount, buy);
     await tx.wait();
     console.log(`Position opened with leverage: ${leverage} and token amount: ${tokenamount}`);
     console.log(`At market price ${marketPrice}`);
