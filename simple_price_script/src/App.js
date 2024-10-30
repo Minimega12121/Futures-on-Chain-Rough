@@ -15,6 +15,8 @@ const App = () => {
   const [tokenAmount, setTokenAmount] = useState(0);
   const [isBuy, setIsBuy] = useState(true); // true for Buy, false for Sell
   const [positionIndex, setPositionIndex] = useState(0);
+  const [openPositions, setOpenPositions] = useState([]);
+  const [closedPositions, setClosedPositions] = useState([]);
 
   // Function to fetch the current market parameters
   const fetchMarketParams = async () => {
@@ -34,6 +36,65 @@ const App = () => {
       console.error("Error fetching market parameters:", error);
     }
   };
+  const fetchPositions = async () => {
+    try {
+      const accounts = await web3.eth.getAccounts();
+      if (!accounts.length) {
+        console.error("No accounts found. Please connect your wallet.");
+        return;
+      }
+      const userAddress = accounts[0];
+      // Fetch Open Positions Count and Details
+      const openPosCount = Number(await futures.methods.positionsCount(userAddress, 0).call()); // Ensure it's a number
+      console.log("Open Positions Count:", openPosCount);
+
+      let openPosArray = [];
+      for (let i = 0; i < openPosCount; i++) {
+        const pos = await futures.methods.openPositions(userAddress, i).call();
+        const pnl = await futures.methods.calculatePnL(userAddress, i).call();
+        // console.log(pos);
+        // console.log(pnl);
+        openPosArray.push({
+          leverage: Number(pos[0]), // Convert BigInt to Number
+          entryPrice: (Number(pos[1]) / 1_000_000).toFixed(2), // Convert and format price
+          tokenUnits: Number(pos[2]),
+          collateral: Number(pos[3]),
+          timestamp: new Date(Number(pos[4]) * 1000).toLocaleString(), // Convert to readable date
+          isBuy: pos[5],
+          pnl: Number(pnl) / 1_000_000
+        });
+      }
+      //console.log("Open Positions:", openPosArray);
+      setOpenPositions(openPosArray);
+
+      // Fetch Closed Positions Count and Details
+      const closedPosCount = Number(await futures.methods.positionsCount(userAddress, 1).call()); // Ensure it's a number
+      console.log("Closed Positions Count:", closedPosCount);
+
+      let closedPosArray = [];
+
+      for (let i = 0; i < closedPosCount; i++) {
+        const pos = await futures.methods.settledPositions(userAddress, i).call();
+        console.log(pos)
+        const pnl = await futures.methods.pnlHistory(userAddress, i).call();
+        console.log(pnl)
+        closedPosArray.push({
+          leverage: Number(pos[0]),
+          entryPrice: (Number(pos[1]) / 1_000_000).toFixed(2),
+          tokenUnits: Number(pos[2]),
+          collateral: Number(pos[3]),
+          timestamp: new Date(Number(pos[4]) * 1000).toLocaleString(),
+          isBuy: pos[5],
+          pnl: Number(pnl) / 1_000_000
+        });
+      }
+      //console.log("Closed Positions:", closedPosArray);
+      setClosedPositions(closedPosArray);
+    } catch (error) {
+      console.error("Error fetching positions:", error);
+    }
+  };
+
 
   // Function to fetch the OHLCV history
   const fetchOHLCVHistory = async () => {
@@ -65,7 +126,9 @@ const App = () => {
         .openPosition(leverage, tokenAmount, isBuy)
         .send({
           from: accounts[0],
-          gasPrice: await web3.eth.getGasPrice()  // Ensure backward compatibility
+          gasPrice: web3.utils.toWei("150","gwei"),  // do 150 gwei for fast testing
+          gas : 300000
+
         });
       alert(`${isBuy ? "Buy" : "Sell"} position opened successfully!`);
     } catch (error) {
@@ -82,7 +145,8 @@ const App = () => {
           .closePosition(positionIndex)
           .send({
             from: accounts[0],
-            gasPrice: await web3.eth.getGasPrice()  // Ensure backward compatibility
+            gasPrice: web3.utils.toWei("150","gwei"),  // do 150 gwei for fast testing
+            gas : 300000  // Ensure backward compatibility
           });
         alert("Position closed successfully!");
       } catch (error) {
@@ -96,6 +160,7 @@ const App = () => {
       fetchMarketParams();
       fetchOHLCVHistory();
       fetchOrderbookHistory();
+      fetchPositions();
     }, 1000);
 
     // Cleanup interval on component unmount
@@ -189,7 +254,65 @@ const App = () => {
         </label>
         <button onClick={handleClosePosition}>Close Position</button>
       </div>
+      <div>
+      <h2>Live Trades (Open Positions)</h2>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Leverage</th>
+            <th>Entry Price</th>
+            <th>Token Units</th>
+            <th>Collateral</th>
+            <th>Timestamp</th>
+            <th>PNL</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          {openPositions.map((position, index) => (
+            <tr key={index}>
+             <td>{position.leverage}</td>
+              <td>{position.entryPrice}</td>
+              <td>{position.tokenUnits}</td>
+              <td>{position.collateral}</td>
+              <td>{position.timestamp}</td>
+              <td>{position.pnl}</td>
+              <td>{position.isBuy ? "Buy" : "Sell"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h2>Closed Trades (Settled Positions)</h2>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Leverage</th>
+            <th>Entry Price</th>
+            <th>Token Units</th>
+            <th>Collateral</th>
+            <th>Timestamp</th>
+            <th>PNL</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          {closedPositions.map((position, index) => (
+            <tr key={index}>
+              <td>{position.leverage}</td>
+              <td>{position.entryPrice}</td>
+              <td>{position.tokenUnits}</td>
+              <td>{position.collateral}</td>
+              <td>{position.timestamp}</td>
+              <td>{position.pnl}</td>
+              <td>{position.isBuy ? "Buy" : "Sell"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </div>
     </div>
+
   );
 };
 

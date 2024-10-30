@@ -90,6 +90,7 @@ contract Oracle {
     mapping(address => FuturesContract[]) public openPositions;
     mapping(address => FuturesContract[]) public settledPositions;
     mapping(address => uint256[2]) public positionsCount; // [0] = open, [1] = settled
+    mapping(address => int128[]) public pnlHistory;
 
     OHLCV[15] public ohlcvHistory;
     uint256 public historyIndex = 0;
@@ -179,7 +180,8 @@ contract Oracle {
 
         FuturesContract memory position = openPositions[msg.sender][positionIndex];
         int128 pnl = calculatePnL(msg.sender, positionIndex);
-
+        settledPositions[msg.sender].push(position);
+        pnlHistory[msg.sender].push(pnl);
         if (pnl < 0) {
             uint128 loss = uint128(-pnl);
             if (loss >= position.collateral) {

@@ -437,6 +437,30 @@ const abi = [
 				"type": "uint256"
 			}
 		],
+		"name": "pnlHistory",
+		"outputs": [
+			{
+				"internalType": "int128",
+				"name": "",
+				"type": "int128"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
 		"name": "positionsCount",
 		"outputs": [
 			{
@@ -630,3 +654,4 @@ const abi = [
 const futures= new web3.eth.Contract(abi, address);
 
 export default futures;
+
