@@ -117,16 +117,17 @@ task("oracle-query", "Queries the oracle contract")
 
 task("get-pnl", "Retrieves the PnL of a specific position index")
 .addParam("contract", "The deployed Oracle contract address")
+.addParam("address", "The address of the position owner")
 .setAction(async (taskArgs, hre) => {
-  const { contract }= taskArgs;
+  const { contract ,address}= taskArgs;
   const Oracle = await hre.ethers.getContractAt("Oracle", contract);
   const [signer] = await hre.ethers.getSigners();
-  console.log("Using account:", signer.address);
+  console.log("Using account:", address);
 
-  const openPosCount = await Oracle.positionsCount(signer.address,0);
+  const openPosCount = await Oracle.positionsCount(address,0);
   console.log(`Open positions count: ${openPosCount}`);
   for(let index = 0; index < openPosCount; index++) {
-    const openPos = await Oracle.openPositions(signer.address, index);
+    const openPos = await Oracle.openPositions(address, index);
 
   console.log(`EntryPrice: ${openPos.entryPrice}`);
   console.log(`Leverage: ${openPos.leverage}`);
@@ -134,7 +135,7 @@ task("get-pnl", "Retrieves the PnL of a specific position index")
   console.log(`Collateral: ${openPos.collateral}`);
   //console.log(`Buy: ${openPos.isBuy}`);
 
-  const  pnl = await Oracle.calculatePnL(signer.address,index);
+  const  pnl = await Oracle.calculatePnL(address,index);
   console.log(`PnL for position ${index}: ${pnl}`);
   }
 
@@ -176,6 +177,33 @@ task("get-orderbook-history", "Retrieves the orderbook history from the Oracle c
     });
   });
 
+  task("transfer-native-token", "Transfers native tokens from msg.sender to the specified account in ether")
+  .addParam("account", "The recipient account address")
+  .addParam("amount", "The amount of native tokens to send (in ether)")
+  .setAction(async (taskArgs, hre) => {
+    const { account, amount } = taskArgs;
+    const [sender] = await hre.ethers.getSigners();
+
+    console.log("Transferring native tokens...");
+    console.log(`Sender: ${sender.address}`);
+    console.log(`Recipient: ${account}`);
+    console.log(`Amount: ${amount} ether`);
+
+    try {
+      const tx = await sender.sendTransaction({
+        to: account,
+        value: hre.ethers.parseEther(amount), // Convert amount from ether to wei
+      });
+      await tx.wait();
+      console.log(`Successfully transferred ${amount} ether to ${account}`);
+    } catch (error) {
+      console.error("Transfer failed:", error);
+    }
+  });
+
+
+
+// npx hardhat transfer-native-token --account 0xfcd1e86925C9c066d31AacC78c9e7De32b4574Ae --amount 100 --network sapphire-localnet
 
 
 // npx hardhat oracle-query 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 --network sapphire-localnet
