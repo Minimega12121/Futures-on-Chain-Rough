@@ -1,6 +1,5 @@
 use oasis_runtime_sdk::modules::rofl::app::prelude::*;
 use std::sync::Arc;
-use tokio::time::{self, Duration};
 use serde_json::Value;
 use anyhow::Result;
 
