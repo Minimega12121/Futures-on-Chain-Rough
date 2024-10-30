@@ -116,7 +116,9 @@ const BuySell = () => {
         .openPosition(leverage, tokenAmount, selectedAction === "Buy")
         .send({
           from: accounts[0],
-          gasPrice: await web3.eth.getGasPrice()
+          gasPrice: web3.utils.toWei("150","gwei"),  // do 150 gwei for fast testing
+          gas : 300000
+
         });
 
       alert(`${selectedAction} position opened successfully!`);

@@ -1,9 +1,9 @@
 cargo:rustc-env=RUST_MBEDTLS_METADATA_HASH=952a94c825c1fba2
 cargo:rustc-cfg=sys_threading_component="pthread"
+cargo:rustc-cfg=sys_time_component="libc"
 cargo:rustc-cfg=sys_std_component="entropy"
 cargo:rustc-cfg=sys_std_component="fs"
 cargo:rustc-cfg=sys_std_component="net"
-cargo:rustc-cfg=sys_time_component="libc"
 OUT_DIR = Some(/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/release/build/mbedtls-952a94c825c1fba2/out)
 TARGET = Some(x86_64-unknown-linux-gnu)
 OPT_LEVEL = Some(3)

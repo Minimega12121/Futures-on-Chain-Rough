@@ -17,7 +17,37 @@ const App = () => {
   const [positionIndex, setPositionIndex] = useState(0);
   const [openPositions, setOpenPositions] = useState([]);
   const [closedPositions, setClosedPositions] = useState([]);
+  const handleAddNetwork = async () => {
+    try {
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: '0x5afd', // Replace with the desired chain ID
+            chainName: 'Sapphire Local Testnet', // Replace with your desired network name
+            rpcUrls: ['http://localhost:8545'], // Replace with your network RPC URL
+            nativeCurrency: {
+              name: 'TEST',
+              symbol: 'TEST',
+              decimals: 18
+            },
+            blockExplorerUrls: ['http://localhost:80']
+          }
+        ]
+      });
+    } catch (error) {
+      console.error("Failed to add network:", error);
+    }
+  };
 
+  const handleConnectWallet = async () => {
+    try {
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      alert("Wallet connected");
+    } catch (error) {
+      console.error("Failed to connect wallet:", error);
+    }
+  };
   // Function to fetch the current market parameters
   const fetchMarketParams = async () => {
     try {
@@ -169,6 +199,9 @@ const App = () => {
 
   return (
     <div className="App">
+       <h1>Futures Market Dashboard</h1>
+      <button onClick={handleConnectWallet}>Connect Wallet</button>
+      <button onClick={handleAddNetwork}>Add Network</button>
       <h1>Futures Market Dashboard</h1>
       <p>Current Market Price: {marketPrice}</p>
       <p>Daily High: {dailyHigh}</p>

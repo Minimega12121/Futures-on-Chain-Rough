@@ -1,7 +1,7 @@
-cargo:rustc-cfg=c_compiler_component="freestanding"
-cargo:rustc-cfg=time_component="custom"
 cargo:rustc-cfg=threading_component="custom"
-cargo:platform-components=c_compiler_component=freestanding,time_component=custom,threading_component=custom
+cargo:rustc-cfg=time_component="custom"
+cargo:rustc-cfg=c_compiler_component="freestanding"
+cargo:platform-components=threading_component=custom,time_component=custom,c_compiler_component=freestanding
 cargo:rerun-if-env-changed=RUST_MBEDTLS_SYS_SOURCE
 cargo:rerun-if-changed=vendor/CMakeLists.txt
 cargo:rerun-if-changed=vendor/include/mbedtls/config_psa.h
@@ -341,8 +341,8 @@ Consolidate compiler generated dependencies of target mbedx509
 [ 82%] Building C object library/CMakeFiles/mbedx509.dir/x509_crl.c.obj
 [ 83%] Building C object library/CMakeFiles/mbedx509.dir/x509_crt.c.obj
 [ 84%] Building C object library/CMakeFiles/mbedx509.dir/x509_csr.c.obj
-[ 85%] Building C object library/CMakeFiles/mbedx509.dir/x509write_crt.c.obj
-[ 86%] Building C object library/CMakeFiles/mbedx509.dir/x509write_csr.c.obj
+[ 85%] Building C object library/CMakeFiles/mbedx509.dir/x509write_csr.c.obj
+[ 86%] Building C object library/CMakeFiles/mbedx509.dir/x509write_crt.c.obj
 [ 87%] Linking C static library libmbedx509.a
 [ 87%] Built target mbedx509
 Consolidate compiler generated dependencies of target mbedtls
