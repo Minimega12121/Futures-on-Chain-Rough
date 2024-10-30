@@ -204,6 +204,6 @@ task("get-orderbook-history", "Retrieves the orderbook history from the Oracle c
 
 
 // npx hardhat transfer-native-token --account 0xfcd1e86925C9c066d31AacC78c9e7De32b4574Ae --amount 100 --network sapphire-localnet
-
-
+//npx hardhat open-position --buy --contract 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 --leverage 30 --tokenamount 150 --network sapphire-localnet
 // npx hardhat oracle-query 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 --network sapphire-localnet
+// npx hardhat get-orderbook-history --contract 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 --network sapphire-localnet
