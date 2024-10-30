@@ -95,6 +95,45 @@ const abi = [
 	},
 	{
 		"inputs": [],
+		"name": "dailyExchangeVolume",
+		"outputs": [
+			{
+				"internalType": "uint128",
+				"name": "",
+				"type": "uint128"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "dailyHigh",
+		"outputs": [
+			{
+				"internalType": "uint128",
+				"name": "",
+				"type": "uint128"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "dailyLow",
+		"outputs": [
+			{
+				"internalType": "uint128",
+				"name": "",
+				"type": "uint128"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "getOHLCVHistory",
 		"outputs": [
 			{
@@ -140,12 +179,65 @@ const abi = [
 	},
 	{
 		"inputs": [],
+		"name": "getOrderbookHistory",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint128",
+						"name": "bidPrice",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "bidVolume",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "askPrice",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "askVolume",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint256",
+						"name": "blockNumber",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Oracle.Orderbook[15]",
+				"name": "",
+				"type": "tuple[15]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "historyIndex",
 		"outputs": [
 			{
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "indexPrice",
+		"outputs": [
+			{
+				"internalType": "uint128",
+				"name": "",
+				"type": "uint128"
 			}
 		],
 		"stateMutability": "view",
@@ -219,6 +311,11 @@ const abi = [
 				"internalType": "uint128",
 				"name": "tokenAmount",
 				"type": "uint128"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isBuy",
+				"type": "bool"
 			}
 		],
 		"name": "openPosition",
@@ -264,6 +361,63 @@ const abi = [
 			{
 				"internalType": "uint256",
 				"name": "timestamp",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isBuy",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "orderbookHistory",
+		"outputs": [
+			{
+				"internalType": "uint128",
+				"name": "bidPrice",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint128",
+				"name": "bidVolume",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint128",
+				"name": "askPrice",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint128",
+				"name": "askVolume",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint256",
+				"name": "blockNumber",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "orderbookIndex",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
 				"type": "uint256"
 			}
 		],
@@ -346,6 +500,11 @@ const abi = [
 				"internalType": "uint256",
 				"name": "timestamp",
 				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isBuy",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -357,9 +516,24 @@ const abi = [
 				"internalType": "uint128",
 				"name": "_marketPrice",
 				"type": "uint128"
+			},
+			{
+				"internalType": "uint128",
+				"name": "_dailyExchangeVolume",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint128",
+				"name": "_dailyHigh",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint128",
+				"name": "_dailyLow",
+				"type": "uint128"
 			}
 		],
-		"name": "submitMarketPriceObservation",
+		"name": "submitMarketObservations",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -393,6 +567,34 @@ const abi = [
 			}
 		],
 		"name": "submitOHLCVObservation",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint128",
+				"name": "bidPrice",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint128",
+				"name": "bidVolume",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint128",
+				"name": "askPrice",
+				"type": "uint128"
+			},
+			{
+				"internalType": "uint128",
+				"name": "askVolume",
+				"type": "uint128"
+			}
+		],
+		"name": "submitOrderbookData",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
