@@ -1,7 +1,7 @@
-cargo:rustc-cfg=threading_component="custom"
-cargo:rustc-cfg=time_component="custom"
 cargo:rustc-cfg=c_compiler_component="freestanding"
-cargo:platform-components=threading_component=custom,time_component=custom,c_compiler_component=freestanding
+cargo:rustc-cfg=time_component="custom"
+cargo:rustc-cfg=threading_component="custom"
+cargo:platform-components=c_compiler_component=freestanding,time_component=custom,threading_component=custom
 cargo:rerun-if-env-changed=RUST_MBEDTLS_SYS_SOURCE
 cargo:rerun-if-changed=vendor/CMakeLists.txt
 cargo:rerun-if-changed=vendor/include/mbedtls/config_psa.h
@@ -328,8 +328,8 @@ Consolidate compiler generated dependencies of target mbedcrypto
 [ 71%] Building C object library/CMakeFiles/mbedcrypto.dir/sha512.c.obj
 [ 72%] Building C object library/CMakeFiles/mbedcrypto.dir/threading.c.obj
 [ 73%] Building C object library/CMakeFiles/mbedcrypto.dir/timing.c.obj
-[ 74%] Building C object library/CMakeFiles/mbedcrypto.dir/version_features.c.obj
-[ 75%] Building C object library/CMakeFiles/mbedcrypto.dir/version.c.obj
+[ 74%] Building C object library/CMakeFiles/mbedcrypto.dir/version.c.obj
+[ 75%] Building C object library/CMakeFiles/mbedcrypto.dir/version_features.c.obj
 [ 76%] Building C object library/CMakeFiles/mbedcrypto.dir/xtea.c.obj
 [ 77%] Linking C static library libmbedcrypto.a
 [ 77%] Built target mbedcrypto

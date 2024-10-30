@@ -95,41 +95,6 @@ impl OracleApp {
 
                 env.client().sign_and_submit_tx(env.signer(), tx).await?;
 
-            //  time::sleep(Duration::from_secs(10)).await;
-
-        //      // Fetch market price data for Bitcoin.
-        // let market_price_response: Value = rofl_utils::https::agent()
-        //     .get("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD")
-        //     .call()?
-        //     .body_mut()
-        //     .read_json()?;
-
-        // let market_price = (market_price_response["USD"]
-        //     .as_f64()
-        //     .unwrap_or_default()
-        //     * 1_000_000.0) as u128;
-
-        // // Prepare and submit the market price observation to the Oracle contract.
-        // let mp_tx_data = [
-        //     ethabi::short_signature("submitMarketPriceObservation", &[
-        //         ethabi::ParamType::Uint(128),
-        //     ])
-        //     .to_vec(),
-        //     ethabi::encode(&[ethabi::Token::Uint(market_price.into())]),
-        // ]
-        // .concat();
-
-        // let mut mp_tx = self.new_transaction(
-        //     "evm.Call",
-        //     module_evm::types::Call {
-        //         address: ORACLE_CONTRACT_ADDRESS.parse().unwrap(),
-        //         value: 0.into(),
-        //         data: mp_tx_data,
-        //     },
-        // );
-        // mp_tx.set_fee_gas(200_000);
-        // env.client().sign_and_submit_tx(env.signer(), mp_tx).await?;
-
 
           // Fetch OHLCV data
         let response: Value = rofl_utils::https::agent()
@@ -184,6 +149,62 @@ impl OracleApp {
 
     tx.set_fee_gas(3_000_000);
     env.client().sign_and_submit_tx(env.signer(), tx).await?;
+
+
+    let response: Value = rofl_utils::https::agent()
+    .get("https://min-api.cryptocompare.com/data/ob/l1/top?fsyms=ETH&tsyms=USD&api_key=3df9cc83af512bebeb5f27bcd1f73556459b93e2fa410f748aa25d3e30213ccf&e=coinbase")
+    .call()?
+    .body_mut()
+    .read_json()?;
+
+// Extract the data for bid and ask prices
+let bid_price = response["Data"]["RAW"]["ETH"]["USD"]["BID"]
+    .as_f64()
+    .ok_or_else(|| anyhow::anyhow!("Bid price not found"))? * 1_000_000.0;
+let ask_price = response["Data"]["RAW"]["ETH"]["USD"]["ASK"]
+    .as_f64()
+    .ok_or_else(|| anyhow::anyhow!("Ask price not found"))? * 1_000_000.0;
+
+// Set a fixed volume for example, as the response structure here doesn't have bid/ask volumes.
+let bid_volume = 1000000u128; // Placeholder, replace with actual volume logic if needed
+let ask_volume = 1000000u128; // Placeholder, replace with actual volume logic if needed
+
+// Convert prices and volumes to `u128` for contract submission
+let bid_price = bid_price as u128;
+let ask_price = ask_price as u128;
+
+// Prepare the transaction data for submitting to the contract
+let tx_data = [
+    ethabi::short_signature("submitOrderbookData", &[
+        ethabi::ParamType::Uint(128),
+        ethabi::ParamType::Uint(128),
+        ethabi::ParamType::Uint(128),
+        ethabi::ParamType::Uint(128),
+    ])
+    .to_vec(),
+    ethabi::encode(&[
+        ethabi::Token::Uint(bid_price.into()),
+        ethabi::Token::Uint(bid_volume.into()),
+        ethabi::Token::Uint(ask_price.into()),
+        ethabi::Token::Uint(ask_volume.into()),
+    ]),
+]
+.concat();
+
+let mut tx = self.new_transaction(
+    "evm.Call",
+    module_evm::types::Call {
+        address: ORACLE_CONTRACT_ADDRESS.parse().unwrap(),
+        value: 0.into(),
+        data: tx_data,
+    },
+);
+
+tx.set_fee_gas(3_000_000);
+env.client().sign_and_submit_tx(env.signer(), tx).await?;
+
+
+
         Ok(())
     }
 

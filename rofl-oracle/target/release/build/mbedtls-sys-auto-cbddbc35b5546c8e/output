@@ -1,9 +1,9 @@
-cargo:rustc-cfg=time_component="libc"
+cargo:rustc-cfg=threading_component="pthread"
+cargo:rustc-cfg=std_component="entropy"
 cargo:rustc-cfg=std_component="fs"
 cargo:rustc-cfg=std_component="net"
-cargo:rustc-cfg=std_component="entropy"
-cargo:rustc-cfg=threading_component="pthread"
-cargo:platform-components=time_component=libc,std_component=fs,std_component=net,std_component=entropy,threading_component=pthread
+cargo:rustc-cfg=time_component="libc"
+cargo:platform-components=threading_component=pthread,std_component=entropy,std_component=fs,std_component=net,time_component=libc
 cargo:rerun-if-env-changed=RUST_MBEDTLS_SYS_SOURCE
 cargo:rerun-if-changed=vendor/CMakeLists.txt
 cargo:rerun-if-changed=vendor/include/mbedtls/config_psa.h
@@ -323,8 +323,8 @@ Consolidate compiler generated dependencies of target mbedcrypto
 [ 67%] Building C object library/CMakeFiles/mbedcrypto.dir/rsa.c.o
 [ 68%] Building C object library/CMakeFiles/mbedcrypto.dir/rsa_internal.c.o
 [ 69%] Building C object library/CMakeFiles/mbedcrypto.dir/sha1.c.o
-[ 70%] Building C object library/CMakeFiles/mbedcrypto.dir/sha256.c.o
-[ 71%] Building C object library/CMakeFiles/mbedcrypto.dir/sha512.c.o
+[ 70%] Building C object library/CMakeFiles/mbedcrypto.dir/sha512.c.o
+[ 71%] Building C object library/CMakeFiles/mbedcrypto.dir/sha256.c.o
 [ 72%] Building C object library/CMakeFiles/mbedcrypto.dir/threading.c.o
 [ 73%] Building C object library/CMakeFiles/mbedcrypto.dir/timing.c.o
 [ 74%] Building C object library/CMakeFiles/mbedcrypto.dir/version.c.o
@@ -340,21 +340,21 @@ Consolidate compiler generated dependencies of target mbedx509
 [ 82%] Building C object library/CMakeFiles/mbedx509.dir/x509_crl.c.o
 [ 83%] Building C object library/CMakeFiles/mbedx509.dir/x509_crt.c.o
 [ 84%] Building C object library/CMakeFiles/mbedx509.dir/x509_csr.c.o
-[ 85%] Building C object library/CMakeFiles/mbedx509.dir/x509write_crt.c.o
-[ 86%] Building C object library/CMakeFiles/mbedx509.dir/x509write_csr.c.o
+[ 85%] Building C object library/CMakeFiles/mbedx509.dir/x509write_csr.c.o
+[ 86%] Building C object library/CMakeFiles/mbedx509.dir/x509write_crt.c.o
 [ 87%] Linking C static library libmbedx509.a
 [ 87%] Built target mbedx509
 Consolidate compiler generated dependencies of target mbedtls
-[ 90%] Building C object library/CMakeFiles/mbedtls.dir/ssl_cookie.c.o
-[ 90%] Building C object library/CMakeFiles/mbedtls.dir/ssl_cache.c.o
 [ 90%] Building C object library/CMakeFiles/mbedtls.dir/net_sockets.c.o
-[ 91%] Building C object library/CMakeFiles/mbedtls.dir/ssl_srv.c.o
-[ 92%] Building C object library/CMakeFiles/mbedtls.dir/debug.c.o
-[ 93%] Building C object library/CMakeFiles/mbedtls.dir/ssl_ciphersuites.c.o
-[ 94%] Building C object library/CMakeFiles/mbedtls.dir/ssl_cli.c.o
-[ 95%] Building C object library/CMakeFiles/mbedtls.dir/ssl_ticket.c.o
-[ 96%] Building C object library/CMakeFiles/mbedtls.dir/ssl_tls.c.o
-[ 97%] Building C object library/CMakeFiles/mbedtls.dir/ssl_msg.c.o
+[ 90%] Building C object library/CMakeFiles/mbedtls.dir/ssl_ciphersuites.c.o
+[ 90%] Building C object library/CMakeFiles/mbedtls.dir/debug.c.o
+[ 91%] Building C object library/CMakeFiles/mbedtls.dir/ssl_cache.c.o
+[ 92%] Building C object library/CMakeFiles/mbedtls.dir/ssl_cookie.c.o
+[ 93%] Building C object library/CMakeFiles/mbedtls.dir/ssl_cli.c.o
+[ 94%] Building C object library/CMakeFiles/mbedtls.dir/ssl_msg.c.o
+[ 95%] Building C object library/CMakeFiles/mbedtls.dir/ssl_srv.c.o
+[ 97%] Building C object library/CMakeFiles/mbedtls.dir/ssl_tls.c.o
+[ 97%] Building C object library/CMakeFiles/mbedtls.dir/ssl_ticket.c.o
 [ 98%] Building C object library/CMakeFiles/mbedtls.dir/ssl_tls13_keys.c.o
 [100%] Linking C static library libmbedtls.a
 [100%] Built target mbedtls

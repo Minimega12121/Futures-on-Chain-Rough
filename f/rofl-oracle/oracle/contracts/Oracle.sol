@@ -44,6 +44,49 @@ contract Oracle {
         bool isBuy; // true for Buy, false for Sell
     }
 
+    // Orderbook structure
+    struct Orderbook {
+        uint128 bidPrice;
+        uint128 bidVolume;
+        uint128 askPrice;
+        uint128 askVolume;
+        uint256 blockNumber;
+    }
+
+    Orderbook[15] public orderbookHistory;
+    uint public orderbookIndex = 0;
+
+     function submitOrderbookData(
+        uint128 bidPrice,
+        uint128 bidVolume,
+        uint128 askPrice,
+        uint128 askVolume
+    ) external {
+        Subcall.roflEnsureAuthorizedOrigin(roflAppID); // Ensures authorized access
+
+        // Update orderbook history array with new data
+        orderbookHistory[orderbookIndex] = Orderbook({
+            bidPrice: bidPrice,
+            bidVolume: bidVolume,
+            askPrice: askPrice,
+            askVolume: askVolume,
+            blockNumber: block.number
+        });
+
+        // Increment index for circular buffer effect
+        orderbookIndex = (orderbookIndex + 1) % orderbookHistory.length;
+    }
+
+    // Function to retrieve the entire orderbook history
+    function getOrderbookHistory() external view returns (Orderbook[15] memory) {
+        return orderbookHistory;
+    }
+
+
+
+
+
+
     mapping(address => FuturesContract[]) public openPositions;
     mapping(address => FuturesContract[]) public settledPositions;
     mapping(address => uint256[2]) public positionsCount; // [0] = open, [1] = settled

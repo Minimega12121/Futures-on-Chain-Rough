@@ -1,6 +1,6 @@
-cargo:rustc-cfg=sys_threading_component="custom"
-cargo:rustc-cfg=sys_time_component="custom"
 cargo:rustc-cfg=sys_c_compiler_component="freestanding"
+cargo:rustc-cfg=sys_time_component="custom"
+cargo:rustc-cfg=sys_threading_component="custom"
 OUT_DIR = Some(/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-platform-support-0e5332dd755635d8/out)
 TARGET = Some(x86_64-fortanix-unknown-sgx)
 OPT_LEVEL = Some(3)

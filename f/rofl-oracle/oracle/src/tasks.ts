@@ -154,6 +154,28 @@ task("close", "Retrieves the PnL of a specific position index")
   console.log(`Position closed`);
 });
 
+task("get-orderbook-history", "Retrieves the orderbook history from the Oracle contract")
+  .addParam("contract", "The deployed Oracle contract address")
+  .setAction(async (taskArgs, hre) => {
+    const { contract } = taskArgs;
+    const Oracle = await hre.ethers.getContractAt("Oracle", contract);
+    const [signer] = await hre.ethers.getSigners();
+    console.log("Using account:", signer.address);
 
-//npx hardhat get-pnl --contract 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 --network sapphire-localnet
+    // Fetch the entire orderbook history
+    const orderbookHistory = await Oracle.getOrderbookHistory();
+
+    console.log("Orderbook History:");
+    orderbookHistory.forEach((entry, index) => {
+      console.log(`Entry ${index + 1}:`);
+      console.log(`  Bid Price: ${entry.bidPrice.toString()}`);
+      console.log(`  Bid Volume: ${entry.bidVolume.toString()}`);
+      console.log(`  Ask Price: ${entry.askPrice.toString()}`);
+      console.log(`  Ask Volume: ${entry.askVolume.toString()}`);
+      console.log(`  Block Number: ${entry.blockNumber.toString()}`);
+    });
+  });
+
+
+
 // npx hardhat oracle-query 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 --network sapphire-localnet
