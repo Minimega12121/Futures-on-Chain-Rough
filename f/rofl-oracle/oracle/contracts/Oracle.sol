@@ -24,6 +24,7 @@ contract Oracle {
     uint128 public dailyHigh=0;
     uint128 public dailyLow=0;
     uint128 public indexPrice=0;
+    int128 public modelSignal=0;
 
     // OHLCV Data Structure
     struct OHLCV {
@@ -110,7 +111,13 @@ contract Oracle {
         });
         }
     }
-
+    function updateModelSignal(
+        int128 newModelSignal
+    )  external
+    {
+        Subcall.roflEnsureAuthorizedOrigin(roflAppID);
+        modelSignal = newModelSignal;
+    }
      // Submit OHLCV observation via authorized ROFL runtime
     function submitOHLCVObservation(
         uint128 open,
@@ -210,59 +217,6 @@ contract Oracle {
 
         return (priceDiff * int128(position.tokenUnits) * int128(position.leverage)) / int128(position.entryPrice);
     }
-
-
-    // // Open a new futures position
-    // function openPosition(uint128 _leverage, uint128 tokenAmount) external {
-    //     require(_leverage >= 1 && _leverage <= 100, "Invalid leverage");
-    //     // require(token.balanceOf(msg.sender) >= tokenAmount, "Insufficient balance");
-
-    //     // token.transferFrom(msg.sender, address(this), tokenAmount);
-    //     // openCalls++;
-
-    //     openPositions[msg.sender].push(FuturesContract({
-    //         leverage: _leverage,
-    //         entryPrice: currentMarketPrice,
-    //         tokenUnits: tokenAmount,
-    //         collateral: tokenAmount,
-    //         timestamp: block.timestamp
-    //     }));
-    //     positionsCount[msg.sender][0]++;
-    // }
-
-    // // Close an existing futures position
-    // function closePosition(uint256 positionIndex) external {
-    //     require(positionIndex < openPositions[msg.sender].length, "Invalid position index");
-
-    //     FuturesContract memory position = openPositions[msg.sender][positionIndex];
-    //     int128 pnl = calculatePnL(msg.sender,positionIndex);
-
-    //     if (pnl < 0) {
-    //         uint128 loss = uint128(-pnl);
-    //         if (loss >= position.collateral) {
-    //             // Position liquidated, user loses collateral
-    //             _removePosition(msg.sender, positionIndex);
-    //         } else {
-    //             // token.transfer(msg.sender, position.collateral - loss);
-    //             _removePosition(msg.sender, positionIndex);
-    //         }
-    //     } else {
-    //         uint128 profit = uint128(pnl);
-    //         // token.mint(address(this), profit + 1); // Mint profit + 1 token for the user
-    //         // token.transfer(msg.sender, position.collateral + profit);
-    //         _removePosition(msg.sender, positionIndex);
-    //     }
-    //     positionsCount[msg.sender][0]--;
-    //     positionsCount[msg.sender][1]++;
-    // }
-
-    // // Calculate profit or loss (PnL) for a position
-    // function calculatePnL(address user, uint256 positionIndex) public view returns (int128) {
-    //     FuturesContract memory position = openPositions[user][positionIndex];
-    //     int128 priceDiff = int128(currentMarketPrice) - int128(position.entryPrice);
-    //     int128 pnl = (priceDiff * int128(position.tokenUnits) * int128(position.leverage)) / int128(position.entryPrice);
-    //     return pnl;
-    // }
 
     // Internal function to remove a position without leaving a gap
     function _removePosition(address user, uint256 index) internal {

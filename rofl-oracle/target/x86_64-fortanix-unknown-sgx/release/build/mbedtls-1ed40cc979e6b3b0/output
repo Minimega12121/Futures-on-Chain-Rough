@@ -1,7 +1,7 @@
 cargo:rustc-env=RUST_MBEDTLS_METADATA_HASH=1ed40cc979e6b3b0
+cargo:rustc-cfg=sys_c_compiler_component="freestanding"
 cargo:rustc-cfg=sys_threading_component="custom"
 cargo:rustc-cfg=sys_time_component="custom"
-cargo:rustc-cfg=sys_c_compiler_component="freestanding"
 OUT_DIR = Some(/home/archit/Desktop/web3/rofl_test/rofl-oracle/target/x86_64-fortanix-unknown-sgx/release/build/mbedtls-1ed40cc979e6b3b0/out)
 TARGET = Some(x86_64-fortanix-unknown-sgx)
 OPT_LEVEL = Some(3)

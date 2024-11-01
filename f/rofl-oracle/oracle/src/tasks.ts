@@ -74,6 +74,7 @@ task("oracle-query", "Queries the oracle contract")
       const dailyLow = await oracle.dailyLow();
       const dailyHigh = await oracle.dailyHigh();
       const dailyExchangeVolume = await oracle.dailyExchangeVolume();
+      const modelSignal = await oracle.modelSignal();
 
       ohlcvHistory.forEach((entry, index) => {
         console.log(`Entry ${index}:`);
@@ -89,6 +90,7 @@ task("oracle-query", "Queries the oracle contract")
       console.log(`DailyLow: ${dailyLow}`);
       console.log(`DailyHigh: ${dailyHigh}`);
       console.log(`DailyExchangeVolume: ${dailyExchangeVolume}`);
+      console.log(`ModelSignal: ${modelSignal}`);
     } catch {
       console.log(`No last observation available.`);
     }
